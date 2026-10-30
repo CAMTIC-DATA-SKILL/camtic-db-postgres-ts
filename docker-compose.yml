@@ -1,0 +1,29 @@
+
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    container_name: timescaledb
+    restart: unless-stopped
+
+    ports:
+      - "25432:5432"
+
+    environment:
+      POSTGRES_USER: camtic
+      POSTGRES_PASSWORD: qwe123
+      POSTGRES_DB: seongjang_testbed
+
+    volumes:
+      - timescale_data:/sda/sda2/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d manufacturing"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    shm_size: 256mb
+
+volumes:
+  timescale_data:
+    name: timescale_data
